@@ -54,28 +54,59 @@ const condense = (inter) => {
     for ( j = i; j < inter.length; j++ ) {
       // if (( i == inter.length-1 ) && ( j == inter.length-1 )) {
       // }
+      console.log('input = ',inter[i],inter[j])
       if ( inter[i] == inter[j] ) {
+        output.push(inter[i])
         continue;
       }
-      console.log('input = ',inter[i],inter[j])
-      if ((inter[i][0] <= inter[j][0]) && (inter[i][1] >= inter[j][1])) {
-        output.push([inter[i][0],inter[i][1]])
-        copied = copied.splice(j)
-      } else if ((inter[i][0] >= inter[j][0]) && (inter[i][1] <= inter[j][1])) {
-        output.push([inter[j][0],inter[j][1]])
-        copied = copied.splice(j)
-      } else if ((inter[i][0] <= inter[j][0]) && ((inter[i][1] >= inter[j][1])&&(inter[i][1] <= inter[j][1]))) {
+      if (
+        (inter[i][0] <= inter[j][0]) && 
+        (inter[i][1] >= inter[j][1])
+        ) {
+        output.pop()
+        //output.push([inter[i][0],inter[i][1]])
+      } else if (
+        (inter[i][0] >= inter[j][0]) && 
+        (inter[i][1] <= inter[j][1])
+        ) {
+        output.pop()
+        //output.push([inter[j][0],inter[j][1]])
+      } else if (
+        (inter[i][0] <= inter[j][0]) && 
+        (
+        (inter[i][1] >= inter[j][1]) && 
+        (inter[i][1] <= inter[j][1])
+        )
+        ) {
         output.push([inter[i][0],inter[j][1]])
-      } else if ((inter[i][0] >= inter[j][0]) && ((inter[i][1] <= inter[j][1])&&(inter[i][1] >= inter[j][1]))) {
+      } else if (
+        (inter[i][0] >= inter[j][0]) && 
+        (
+        (inter[i][1] <= inter[j][1]) && 
+        (inter[i][1] >= inter[j][1])
+        )
+        ) {
         output.push([inter[j][0],inter[i][1]])
-      } else if ((inter[i][0] >= inter[j][0]) && (inter[i][0] <= inter[j][1]) && (inter[i][1] >= inter[j][1])) {
+      } else if (
+        (
+        (inter[i][0] >= inter[j][0]) && 
+        (inter[i][0] <= inter[j][1])
+        ) && 
+        (inter[i][1] >= inter[j][1])
+        ) {
         output.push([inter[j][0],inter[i][1]])
-      } else if ((inter[i][0] <= inter[j][0]) && (inter[i][0] >= inter[j][1]) && (inter[i][1] <= inter[j][1])) {
+      } else if (
+        (
+        (inter[i][0] <= inter[j][0]) && 
+        (inter[i][0] >= inter[j][1])
+        ) && 
+        (inter[i][1] <= inter[j][1])
+        ) {
         output.push([inter[i][0],inter[j][1]])
       } else {
+        
       }
       console.log('output = ', output)
-      console.log('copied = ', copied)
     }
   }
   return output
