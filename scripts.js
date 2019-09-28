@@ -49,16 +49,21 @@ result:
 
 const condense = (inter) => {
   let output = []
+  let copied = JSON.parse(JSON.stringify(inter))
   for ( i = 0; i < inter.length; i++ ) {
     for ( j = i; j < inter.length; j++ ) {
+      // if (( i == inter.length-1 ) && ( j == inter.length-1 )) {
+      // }
       if ( inter[i] == inter[j] ) {
         continue;
       }
       console.log('input = ',inter[i],inter[j])
       if ((inter[i][0] <= inter[j][0]) && (inter[i][1] >= inter[j][1])) {
         output.push([inter[i][0],inter[i][1]])
+        copied = copied.splice(j)
       } else if ((inter[i][0] >= inter[j][0]) && (inter[i][1] <= inter[j][1])) {
         output.push([inter[j][0],inter[j][1]])
+        copied = copied.splice(j)
       } else if ((inter[i][0] <= inter[j][0]) && ((inter[i][1] >= inter[j][1])&&(inter[i][1] <= inter[j][1]))) {
         output.push([inter[i][0],inter[j][1]])
       } else if ((inter[i][0] >= inter[j][0]) && ((inter[i][1] <= inter[j][1])&&(inter[i][1] >= inter[j][1]))) {
@@ -68,10 +73,9 @@ const condense = (inter) => {
       } else if ((inter[i][0] <= inter[j][0]) && (inter[i][0] >= inter[j][1]) && (inter[i][1] <= inter[j][1])) {
         output.push([inter[i][0],inter[j][1]])
       } else {
-        output.push(inter[i])
       }
-      debugger;
       console.log('output = ', output)
+      console.log('copied = ', copied)
     }
   }
   return output
@@ -90,7 +94,7 @@ $(document).ready(function() {
     input1 = input1.replace(/\'/g,'"')  //JSON.parse does not like single quotes for arrays
     input1 = JSON.parse(input1)
     event.preventDefault()
-    $('#output-1').text(elimArr(input1))
+    $('#output-1').text(JSON.stringify(input1))
 
   })
 });
