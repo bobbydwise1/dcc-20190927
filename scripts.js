@@ -13,38 +13,65 @@ For example, given [(1, 3), (5, 8), (4, 10), (20, 25)], you should return [(1, 3
 /* Notes:
 For intervals labeled:
 
-interval1:  [i1,j1]
-interval2:  [i2,j2]
+interval1:  [i0,i1]
+interval2:  [j0,j1]
 
 ensure all these cases (and their pair) are covered:
 
 case1:  One interval can swallow the entire other interval
-i1 <= i2 && j1 >= j2
-result:  delete [i2,j2], because it is absorbed by the bigger interval [i1,j1]
+i0 <= j0 && i1 >= j1
+result:  delete [j0,j1], because it is absorbed by the bigger interval [i0,i1]
+ex:
+[i0,i1] = [10,40]
+[j0,j1] = [15,30]
+result:
+[i0,i1] = [10,40]
 
 case2:  One interval overlaps into the start of the next interval
-i1 <= i2 && (j1 >= i2 && j1 <= j2)
-result:  delete both, and a new interval, [i1,j2] is created
+i0 <= j0 && (i1 >= j1 && i1 <= j1)
+result:  delete both, and a new interval, [i0,j1] is created
+ex:
+[i0,i1] = [10,40]
+[j0,j1] = [30,60]
+result:
+[i0,j1] = [10,60]
 
 case3:  One interval overlaps into the end of the next interval
-(i1 >= i2 && i1 <= j2) && j1 >= j2
-result:  delete both, and a new interval, [i2,j1] is created
+(i0 >= j0 && i0 <= j1) && i1 >= j1
+result:  delete both, and a new interval, [j0,i1] is created
+ex:
+[i0,i1] = [10,40]
+[j0,j1] = [5,20]
+result:
+[j0,i1] = [5,40]
 
 */
 
-const condense = (yourMatrix) => {
+const condense = (inter) => {
   let output = []
-  for ( i = 0; i < yourMatrix.length; i++ ) {
-    for ( j = i; j < yourMatrix.length; j++ ) {
-      if ( yourMatrix[i] == yourMatrix[j] ) {
+  for ( i = 0; i < inter.length; i++ ) {
+    for ( j = i; j < inter.length; j++ ) {
+      if ( inter[i] == inter[j] ) {
         continue;
       }
-      //case 1
-      if ((yourMatrix[i][0] <= yourMatrix[j][0]) && (yourMatrix[i][1] >= yourMatrix[j][1])) {
-        output.push([yourMatrix[i][0],yourMatrix[i][1]])
-      } else if ((yourMatrix[i][0] >= yourMatrix[j][0]) && (yourMatrix[i][1] <= yourMatrix[j][1])) {
-        output.push([yourMatrix[j][0],yourMatrix[j][1]])
-      } else if ((yourMatrix[i][0] <= yourMatrix[j][0]))
+      console.log('input = ',inter[i],inter[j])
+      if ((inter[i][0] <= inter[j][0]) && (inter[i][1] >= inter[j][1])) {
+        output.push([inter[i][0],inter[i][1]])
+      } else if ((inter[i][0] >= inter[j][0]) && (inter[i][1] <= inter[j][1])) {
+        output.push([inter[j][0],inter[j][1]])
+      } else if ((inter[i][0] <= inter[j][0]) && ((inter[i][1] >= inter[j][1])&&(inter[i][1] <= inter[j][1]))) {
+        output.push([inter[i][0],inter[j][1]])
+      } else if ((inter[i][0] >= inter[j][0]) && ((inter[i][1] <= inter[j][1])&&(inter[i][1] >= inter[j][1]))) {
+        output.push([inter[j][0],inter[i][1]])
+      } else if ((inter[i][0] >= inter[j][0]) && (inter[i][0] <= inter[j][1]) && (inter[i][1] >= inter[j][1])) {
+        output.push([inter[j][0],inter[i][1]])
+      } else if ((inter[i][0] <= inter[j][0]) && (inter[i][0] >= inter[j][1]) && (inter[i][1] <= inter[j][1])) {
+        output.push([inter[i][0],inter[j][1]])
+      } else {
+        output.push(inter[i])
+      }
+      debugger;
+      console.log('output = ', output)
     }
   }
   return output
