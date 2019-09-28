@@ -10,7 +10,27 @@ The input list is not necessarily ordered in any way.
 For example, given [(1, 3), (5, 8), (4, 10), (20, 25)], you should return [(1, 3), (4, 10), (20, 25)].
 */
 
+/* Notes:
+For intervals labeled:
 
+interval1:  [i1,j1]
+interval2:  [i2,j2]
+
+ensure all these cases (and their pair) are covered:
+
+case1:  One interval can swallow the entire other interval
+i1 <= i2 && j1 >= j2
+result:  delete [i2,j2], because it is absorbed by the bigger interval [i1,j1]
+
+case2:  One interval overlaps into the start of the next interval
+i1 <= i2 && (j1 >= i2 && j1 <= j2)
+result:  delete both, and a new interval, [i1,j2] is created
+
+case3:  One interval overlaps into the end of the next interval
+(i1 >= i2 && i1 <= j2) && j1 >= j2
+result:  delete both, and a new interval, [i2,j1] is created
+
+*/
 
 const condense = (yourMatrix) => {
   let output = []
@@ -19,16 +39,15 @@ const condense = (yourMatrix) => {
       if ( yourMatrix[i] == yourMatrix[j] ) {
         continue;
       }
-      console.log(i,j)
-      console.log(yourMatrix[i], yourMatrix[j])
-      if (yourMatrix[i][1] > yourMatrix[j][0]) {
-        console.log('bigger')
-      } else {
-        console.log('smaller')
-      }
-
+      //case 1
+      if ((yourMatrix[i][0] <= yourMatrix[j][0]) && (yourMatrix[i][1] >= yourMatrix[j][1])) {
+        output.push([yourMatrix[i][0],yourMatrix[i][1]])
+      } else if ((yourMatrix[i][0] >= yourMatrix[j][0]) && (yourMatrix[i][1] <= yourMatrix[j][1])) {
+        output.push([yourMatrix[j][0],yourMatrix[j][1]])
+      } else if ((yourMatrix[i][0] <= yourMatrix[j][0]))
     }
   }
+  return output
 }
 
 const interval1 = [1,3]
